@@ -1,0 +1,70 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "whsmooth"
+version = "0.0.1"
+description = "Whittaker-Henderson smoothing for actuarial graduation — 1D, 2D, with automatic lambda selection via REML/GCV/AIC."
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [
+    { name = "Isaac López", email = "isaaclopg@gmail.com" },
+]
+keywords = [
+    "actuarial",
+    "smoothing",
+    "whittaker-henderson",
+    "graduation",
+    "mortality",
+    "ratemaking",
+    "gcv",
+    "reml",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Typing :: Typed",
+]
+dependencies = [
+    "numpy>=1.24",
+    "pandas>=2.0",
+    "scipy>=1.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0",
+    "pytest-cov>=4.0",
+    "ruff>=0.4",
+]
+plot = [
+    "matplotlib>=3.7",
+]
+
+[project.urls]
+Homepage = "https://github.com/CosmikArt/whsmooth"
+Repository = "https://github.com/CosmikArt/whsmooth"
+Issues = "https://github.com/CosmikArt/whsmooth/issues"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/whsmooth"]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
