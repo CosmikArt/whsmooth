@@ -144,17 +144,6 @@ class WhittakerHenderson2D:
             else "gcv"
         )
         eff_lam = float(np.sqrt(max(lam_r, 1e-300) * max(lam_c, 1e-300)))
-        self.gcv_score_ = float(
-            _crit(
-                method_for_score,
-                y_vec.size,
-                null_dim,
-                res.rss,
-                res.rss_penalised,
-                res.edf,
-                res.log_det_A,
-                eff_lam,
-            )
-        )
+        self.gcv_score_ = float(_crit(method_for_score, y_vec.size, null_dim, res, eff_lam))
         self.residuals_ = Y_arr - self.fitted_
         return self

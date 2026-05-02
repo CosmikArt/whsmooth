@@ -12,6 +12,7 @@ is small enough (banded) that it dominates nothing.
 
 from __future__ import annotations
 
+import warnings
 from dataclasses import dataclass
 
 import numpy as np
@@ -24,7 +25,16 @@ class SolveResult:
     edf: float
     rss: float
     rss_penalised: float
-    log_det_A: float
+    A: np.ndarray  # full (n, n) matrix W + lam P, kept for lazy diagnostics
+
+    def log_det(self) -> float:
+        """``log|A|`` — only computed on demand (REML uses it; GCV/AIC do not)."""
+        with warnings.catch_warnings(), np.errstate(divide="ignore", over="ignore", invalid="ignore"):
+            warnings.simplefilter("ignore", RuntimeWarning)
+            sign, log_det_A = np.linalg.slogdet(self.A)
+        if sign <= 0:
+            return float("nan")
+        return float(log_det_A)
 
 
 def solve(
@@ -58,17 +68,7 @@ def solve(
     pen_term = float(lam * a @ (penalty @ a))
     rss_pen = rss + pen_term
 
-    sign, log_det_A = np.linalg.slogdet(A)
-    if sign <= 0:
-        log_det_A = float("nan")
-
-    return SolveResult(
-        fitted=a,
-        edf=edf,
-        rss=rss,
-        rss_penalised=rss_pen,
-        log_det_A=float(log_det_A),
-    )
+    return SolveResult(fitted=a, edf=edf, rss=rss, rss_penalised=rss_pen, A=A)
 
 
 def kron_penalty(

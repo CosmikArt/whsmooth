@@ -28,22 +28,19 @@ def _criterion(
     method: LambdaMethod,
     n: int,
     null_dim: int,
-    rss: float,
-    rss_pen: float,
-    edf: float,
-    log_det_A: float,
+    res,  # SolveResult — typed loosely to avoid circular import in tests
     lam: float,
 ) -> float:
     eps = 1e-300
     if method == "gcv":
-        denom = max(n - edf, 1e-10)
-        return n * rss / denom**2
+        denom = max(n - res.edf, 1e-10)
+        return n * res.rss / denom**2
     if method == "aic":
-        return n * np.log(max(rss / n, eps)) + 2.0 * edf
+        return n * np.log(max(res.rss / n, eps)) + 2.0 * res.edf
     if method == "reml":
         # Wood (2011): V_r ∝ (n-Mp) log(rss_pen) + log|A| - (n-Mp) log(lam)
         m = max(n - null_dim, 1)
-        return m * np.log(max(rss_pen, eps)) + log_det_A - m * np.log(max(lam, eps))
+        return m * np.log(max(res.rss_penalised, eps)) + res.log_det() - m * np.log(max(lam, eps))
     raise ValueError(f"unknown method {method!r}")
 
 
@@ -60,7 +57,7 @@ def select_lambda_1d(
     def objective(log_lam: float) -> float:
         lam = 10.0**log_lam
         res = solve(y, weights, penalty, lam)
-        return _criterion(method, n, null_dim, res.rss, res.rss_penalised, res.edf, res.log_det_A, lam)
+        return _criterion(method, n, null_dim, res, lam)
 
     result = minimize_scalar(objective, bounds=_LOG_LAM_BOUNDS, method="bounded", options={"xatol": 1e-3})
     return float(10.0**result.x)
@@ -92,7 +89,7 @@ def select_lambda_2d(
         res = solve(y_vec, weights_vec, P, lam=1.0)
         # For REML's log(lam) term, use the geometric mean as an effective lam.
         eff_lam = float(np.sqrt(max(lam_r, 1e-300) * max(lam_c, 1e-300)))
-        return _criterion(method, n, null_dim, res.rss, res.rss_penalised, res.edf, res.log_det_A, eff_lam)
+        return _criterion(method, n, null_dim, res, eff_lam)
 
     x0 = np.array([0.0 if fixed_r is None else 0.0, 0.0 if fixed_c is None else 0.0])
     bounds = [_LOG_LAM_BOUNDS, _LOG_LAM_BOUNDS]

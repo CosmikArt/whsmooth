@@ -21,21 +21,21 @@ def gcv_score(y: np.ndarray, weights: np.ndarray | None, lam: float, order: int 
     """GCV criterion at the given lambda."""
     y_arr, w, P, n = _prep(y, weights, order)
     res = solve(y_arr, w, P, lam)
-    return _criterion("gcv", n, order, res.rss, res.rss_penalised, res.edf, res.log_det_A, lam)
+    return _criterion("gcv", n, order, res, lam)
 
 
 def reml_score(y: np.ndarray, weights: np.ndarray | None, lam: float, order: int = 2) -> float:
     """REML criterion at the given lambda (Wood 2011, up to additive const)."""
     y_arr, w, P, n = _prep(y, weights, order)
     res = solve(y_arr, w, P, lam)
-    return _criterion("reml", n, order, res.rss, res.rss_penalised, res.edf, res.log_det_A, lam)
+    return _criterion("reml", n, order, res, lam)
 
 
 def aic_score(y: np.ndarray, weights: np.ndarray | None, lam: float, order: int = 2) -> float:
     """AIC criterion at the given lambda."""
     y_arr, w, P, n = _prep(y, weights, order)
     res = solve(y_arr, w, P, lam)
-    return _criterion("aic", n, order, res.rss, res.rss_penalised, res.edf, res.log_det_A, lam)
+    return _criterion("aic", n, order, res, lam)
 
 
 def edf(y: np.ndarray, weights: np.ndarray | None, lam: float, order: int = 2) -> float:

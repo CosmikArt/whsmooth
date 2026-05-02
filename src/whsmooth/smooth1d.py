@@ -120,16 +120,7 @@ class WhittakerHenderson1D:
         score_method: LambdaMethod = (
             self._criterion if self._criterion in {"gcv", "reml", "aic"} else "gcv"  # type: ignore[assignment]
         )
-        score = _criterion(
-            score_method,
-            n,
-            self.order,
-            res.rss,
-            res.rss_penalised,
-            res.edf,
-            res.log_det_A,
-            lam_value,
-        )
+        score = _criterion(score_method, n, self.order, res, lam_value)
 
         self.fitted_ = res.fitted
         self.lambda_ = float(lam_value)
