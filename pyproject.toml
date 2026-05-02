@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "whsmooth"
-version = "0.0.1"
-description = "Whittaker-Henderson smoothing for actuarial graduation — 1D, 2D, with automatic lambda selection via REML/GCV/AIC."
+version = "0.1.0"
+description = "Whittaker-Henderson smoothing for P&C ratemaking and actuarial graduation — 1D, 2D, automatic lambda selection (GCV/REML/AIC)."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -14,11 +14,15 @@ authors = [
 ]
 keywords = [
     "actuarial",
+    "p&c",
+    "non-life",
+    "ratemaking",
+    "pricing",
     "smoothing",
     "whittaker-henderson",
     "graduation",
-    "mortality",
-    "ratemaking",
+    "loss-development",
+    "severity",
     "gcv",
     "reml",
 ]
@@ -33,28 +37,33 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Office/Business :: Financial",
     "Typing :: Typed",
 ]
 dependencies = [
     "numpy>=1.24",
-    "pandas>=2.0",
     "scipy>=1.10",
 ]
 
 [project.optional-dependencies]
+pandas = ["pandas>=2.0"]
+plot = ["matplotlib>=3.7"]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
     "ruff>=0.4",
-]
-plot = [
+    "build>=1.0",
+    "twine>=5.0",
     "matplotlib>=3.7",
+    "pandas>=2.0",
 ]
 
 [project.urls]
 Homepage = "https://github.com/CosmikArt/whsmooth"
 Repository = "https://github.com/CosmikArt/whsmooth"
 Issues = "https://github.com/CosmikArt/whsmooth/issues"
+Documentation = "https://github.com/CosmikArt/whsmooth#readme"
+Changelog = "https://github.com/CosmikArt/whsmooth/blob/main/CHANGELOG.md"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/whsmooth"]
