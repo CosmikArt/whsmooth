@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use whsmooth in your work, please cite it as below."
+title: "whsmooth: Whittaker-Henderson smoothing for P&C ratemaking and actuarial graduation in Python"
+version: 0.1.0
+date-released: 2026-05-02
+authors:
+  - family-names: López
+    given-names: Isaac
+license: MIT
+repository-code: "https://github.com/CosmikArt/whsmooth"
+url: "https://github.com/CosmikArt/whsmooth"
+keywords:
+  - actuarial
+  - p&c
+  - ratemaking
+  - smoothing
+  - whittaker-henderson
+type: software
